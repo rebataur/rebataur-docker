@@ -1,0 +1,46 @@
+FROM ubuntu
+
+MAINTAINER Rebataur
+
+RUN apt-get update -y
+
+ADD ./downloads /downloads
+
+# EXTRACT JAVA, HADOOP, HIVE
+RUN mkdir hdp
+RUN tar -xvf /downloads/jdk-7u79-linux-x64.tar.gz --directory /hdp
+RUN tar -xvf /downloads/hadoop-2.7.1.tar.gz --directory /hdp
+RUN tar -xvf /downloads/apache-hive-1.2.1-bin.tar.gz --directory /hdp
+
+# SET PROFILE PATH
+RUN echo 'export JAVA_HOME=/hdp/jdk1.7.0_79' >> /etc/profile
+RUN echo 'PATH=$PATH:$JAVA_HOME/bin' >> /etc/profile
+RUN echo 'export PATH' >> /etc/profile
+RUN echo 'export HADOOP_HOME="/hdp/hadoop-2.7.1"' >> /etc/profile
+RUN echo 'PATH=$PATH:$HADOOP_HOME/bin' >> /etc/profile
+RUN echo 'PATH=$PATH:$HADOOP_HOME/sbin' >> /etc/profile
+RUN echo 'export PATH' >> /etc/profile
+RUN echo 'export HIVE_HOME="/hdp/apache-hive-1.2.1-bin"' >> /etc/profile
+RUN echo 'PATH=$PATH:$HIVE_HOME/bin' >> /etc/profile
+RUN echo 'export PATH' >> /etc/profile
+
+
+# Install some stuff
+RUN sudo apt-get install ssh -y
+RUN sudo apt-get install rsync -y 
+
+
+# Add Hadoop XML
+ENV HADOOP_PREFIX /hdp/hadoop-2.7.1
+
+ADD ./xml/core-site.xml $HADOOP_PREFIX/etc/hadoop/core-site.xml
+ADD ./xml/hdfs-site.xml $HADOOP_PREFIX/etc/hadoop/hdfs-site.xml
+ADD ./xml/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
+ADD ./xml/hadoop-env.sh $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
+
+ADD bootstrap.sh /etc/bootstrap.sh
+RUN chown root:root /etc/bootstrap.sh
+RUN chmod 700 /etc/bootstrap.sh
+ENV BOOTSTRAP /etc/bootstrap.sh
+
+#CMD ["/etc/bootstrap.sh","-d"]
