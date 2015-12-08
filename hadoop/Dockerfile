@@ -43,4 +43,15 @@ RUN chown root:root /etc/bootstrap.sh
 RUN chmod 700 /etc/bootstrap.sh
 ENV BOOTSTRAP /etc/bootstrap.sh
 
-#CMD ["/etc/bootstrap.sh","-d"]
+RUN ssh-keygen -t dsa -P '' -f ~/.ssh/ssh_host_dsa_key
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/ssh_host_rsa_key
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+RUN cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+
+ADD ssh_config /root/.ssh/config
+RUN chmod 600 /root/.ssh/config
+RUN chown root:root /root/.ssh/config
+
+CMD ["/etc/bootstrap.sh","-d"]
+
+
