@@ -15,9 +15,17 @@ source /etc/profile
 #ssh -o StrictHostKeyChecking=no 127.0.0.1
 
 
+echo "Formatting Namenode"
+echo" ------------------"
 
 hdfs namenode -format
+echo "Starting Hadoop "
+echo "------------------"
+
 start-dfs.sh
+echo "Starting HiveServer2 "
+echo "------------------"
+
 hiveserver2 &
 
 
