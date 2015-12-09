@@ -16,7 +16,7 @@ source /etc/profile
 
 
 echo "Formatting Namenode"
-echo" ------------------"
+echo " ------------------"
 
 hdfs namenode -format
 echo "Starting Hadoop "

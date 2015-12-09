@@ -1,3 +1,3 @@
 sudo docker build -t rebdoop .
-sudo docker run -i -t -p 10000:10000 rebdoop
+docker run  -v /home/ranjan/reb_repository:/repository -p 10000:10000 --name rebdoop rebdoop 
 
